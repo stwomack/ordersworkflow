@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ordersworkflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ordersworkflow
+  template:
+    metadata:
+      labels:
+        app: ordersworkflow
+    spec:
+      containers:
+        - name: ordersworkflow
+          image: stwomack/ordersworkflow:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: tls-volume
+              mountPath: /usr/local/bin
+              readOnly: false
+      volumes:
+        - name: tls-volume
+          secret:
+            secretName: tls-secrets

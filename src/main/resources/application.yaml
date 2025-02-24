@@ -1,0 +1,13 @@
+---
+spring.application.name: ordersworkflow
+orderprocessingservice-url: http://orderprocessing-service/
+temporal:
+  worker:
+    topic: orders-tasks
+  target: orders-dev.imu8t.tmprl.cloud:7233
+  ns: orders-dev.imu8t
+  cert: /usr/local/bin/ca.pem
+  key: /usr/local/bin/ca.key
+logging:
+  level:
+    io.temporal: DEBUG
