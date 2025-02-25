@@ -1,7 +1,7 @@
 package com.womack.ordersworkflow.activities;
 
-
 import com.womack.ordersworkflow.domain.Customer;
+import com.womack.ordersworkflow.domain.OrderActivityResponse;
 import com.womack.ordersworkflow.domain.OrderItem;
 import com.womack.ordersworkflow.domain.OrderPackage;
 import com.womack.ordersworkflow.domain.Payment;
@@ -21,24 +21,28 @@ public class OrderActivitiesImpl  implements OrderActivities {
     private final Logger LOG = LoggerFactory.getLogger(OrderActivitiesImpl.class);
 
     @Override
-    public String processPayment(Payment payment) {
+    public OrderActivityResponse processPayment(Payment payment) {
         LOG.info("orderprocessingservice-url {} ", serviceUrl);
-        return restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
+        String response = restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
+        return new OrderActivityResponse(response);
     }
 
     @Override
-    public String checkInventory(List<OrderItem> orderItems) {
-        return restTemplate.postForObject(serviceUrl + "checkInventory", getHttpEntity(orderItems), String.class);
+    public OrderActivityResponse checkInventory(List<OrderItem> orderItems) {
+        String response = restTemplate.postForObject(serviceUrl + "checkInventory", getHttpEntity(orderItems), String.class);
+        return new OrderActivityResponse(response);
     }
 
     @Override
-    public String shipPackage(List<OrderPackage> orderPackages) {
-        return restTemplate.postForObject(serviceUrl + "shipPackage", getHttpEntity(orderPackages), String.class);
+    public OrderActivityResponse shipPackage(List<OrderPackage> orderPackages) {
+        String response = restTemplate.postForObject(serviceUrl + "shipPackage", getHttpEntity(orderPackages), String.class);
+        return new OrderActivityResponse(response);
     }
 
     @Override
-    public String notifyCustomer(Customer customer) {
-        return restTemplate.postForObject(serviceUrl + "notifyCustomer", getHttpEntity(customer), String.class);
+    public OrderActivityResponse notifyCustomer(Customer customer) {
+        String response = restTemplate.postForObject(serviceUrl + "notifyCustomer", getHttpEntity(customer), String.class);
+        return new OrderActivityResponse(response);
     }
 
     private static HttpEntity<Object> getHttpEntity(Object object) {

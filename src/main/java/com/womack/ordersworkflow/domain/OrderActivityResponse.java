@@ -6,5 +6,9 @@ public class OrderActivityResponse {
     public OrderActivityResponse(String message) {
         this.message = message;
     }
+
+    public String getMessage() {
+        return message;
+    }
 }
 

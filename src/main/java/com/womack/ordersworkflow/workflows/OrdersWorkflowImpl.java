@@ -30,11 +30,11 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
     @Override
     public String processOrder(SubmittedOrder order) {
         LOG.info("Workflow init: " + order.toString());
-        String paymentStatus = activities.processPayment(order.getPayment());
-        String inventoryStatus = activities.checkInventory(order.getOrderItems());
-        String packageStatus = activities.shipPackage(order.getOrderPackages());
-        String notificationStatus = activities.notifyCustomer(order.getCustomer());
-        String returnMessage = String.join(" -- ", paymentStatus, inventoryStatus, packageStatus, notificationStatus);
+        OrderActivityResponse paymentStatus = activities.processPayment(order.getPayment());
+        OrderActivityResponse inventoryStatus = activities.checkInventory(order.getOrderItems());
+        OrderActivityResponse packageStatus = activities.shipPackage(order.getOrderPackages());
+        OrderActivityResponse notificationStatus = activities.notifyCustomer(order.getCustomer());
+        String returnMessage = String.join(" -- ", paymentStatus.getMessage(), inventoryStatus.getMessage(), packageStatus.getMessage(), notificationStatus.getMessage());
         return String.format("%s%s", "Status: ", returnMessage);
     }
 
