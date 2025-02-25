@@ -21,28 +21,32 @@ public class OrderActivitiesImpl  implements OrderActivities {
     private final Logger LOG = LoggerFactory.getLogger(OrderActivitiesImpl.class);
 
     @Override
-    public OrderActivityResponse processPayment(Payment payment) {
+    public String processPayment(Payment payment) {
         LOG.info("orderprocessingservice-url {} ", serviceUrl);
         String response = restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
-        return new OrderActivityResponse(response);
+        OrderActivityResponse oar = new OrderActivityResponse(response);
+        return response;
     }
 
     @Override
-    public OrderActivityResponse checkInventory(List<OrderItem> orderItems) {
+    public String checkInventory(List<OrderItem> orderItems) {
         String response = restTemplate.postForObject(serviceUrl + "checkInventory", getHttpEntity(orderItems), String.class);
-        return new OrderActivityResponse(response);
+        OrderActivityResponse oar = new OrderActivityResponse(response);
+        return response;
     }
 
     @Override
-    public OrderActivityResponse shipPackage(List<OrderPackage> orderPackages) {
+    public String shipPackage(List<OrderPackage> orderPackages) {
         String response = restTemplate.postForObject(serviceUrl + "shipPackage", getHttpEntity(orderPackages), String.class);
-        return new OrderActivityResponse(response);
+        OrderActivityResponse oar = new OrderActivityResponse(response);
+        return response;
     }
 
     @Override
-    public OrderActivityResponse notifyCustomer(Customer customer) {
+    public String notifyCustomer(Customer customer) {
         String response = restTemplate.postForObject(serviceUrl + "notifyCustomer", getHttpEntity(customer), String.class);
-        return new OrderActivityResponse(response);
+        OrderActivityResponse oar = new OrderActivityResponse(response);
+        return response;
     }
 
     private static HttpEntity<Object> getHttpEntity(Object object) {
