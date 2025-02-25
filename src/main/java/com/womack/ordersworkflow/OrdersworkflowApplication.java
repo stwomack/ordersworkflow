@@ -72,14 +72,15 @@ public class OrdersworkflowApplication {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 200000)
+    @Scheduled(fixedRate = 20000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         WorkflowOptions options = WorkflowOptions.newBuilder()
                 .setTaskQueue(temporalWorkerTopic)
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);
-//        workflow.processOrder(SubmittedOrderHelper.createSubmittedOrder());
+        // This was my first assumption. Keeping it for discussion
+        // workflow.processOrder(SubmittedOrderHelper.createSubmittedOrder());
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, SubmittedOrderHelper.createSubmittedOrder());
         LOG.info("Order Workflow Submitted: {}:{}", we.getWorkflowId(), we.getRunId());
     }

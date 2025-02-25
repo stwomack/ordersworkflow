@@ -28,14 +28,15 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
     private final OrderActivities activities = Workflow.newActivityStub(OrderActivities.class, options);
 
     @Override
-    public String processOrder(SubmittedOrder order) {
+    public OrderActivityResponse processOrder(SubmittedOrder order) {
         LOG.info("Workflow init: " + order.toString());
         String paymentStatus = activities.processPayment(order.getPayment());
         String inventoryStatus = activities.checkInventory(order.getOrderItems());
         String packageStatus = activities.shipPackage(order.getOrderPackages());
         String notificationStatus = activities.notifyCustomer(order.getCustomer());
         String returnMessage = String.join(" -- ", paymentStatus, inventoryStatus, packageStatus, notificationStatus);
-        return String.format("%s%s", "Status: ", returnMessage);
+        LOG.info(String.format("%s%s", "Status: ", returnMessage));
+        return new OrderActivityResponse(returnMessage);
     }
 
 }
