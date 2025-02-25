@@ -9,7 +9,6 @@ import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.common.RetryOptions;
 import io.temporal.serviceclient.SimpleSslContextBuilder;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
@@ -29,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Duration;
 
 @SpringBootApplication
 @EnableScheduling
@@ -74,13 +72,14 @@ public class OrdersworkflowApplication {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 20000)
+    @Scheduled(fixedRate = 200000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         WorkflowOptions options = WorkflowOptions.newBuilder()
                 .setTaskQueue(temporalWorkerTopic)
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);
+//        workflow.processOrder(SubmittedOrderHelper.createSubmittedOrder());
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, SubmittedOrderHelper.createSubmittedOrder());
         LOG.info("Order Workflow Submitted: {}:{}", we.getWorkflowId(), we.getRunId());
     }
@@ -100,12 +99,6 @@ public class OrdersworkflowApplication {
                 .setTarget(target)
                 .build();
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(stubsOptions);
-        RetryOptions retryOptions = RetryOptions.newBuilder()
-                .setInitialInterval(Duration.ofSeconds(5))
-                .setMaximumInterval(Duration.ofMinutes(30))
-                .setBackoffCoefficient(2.0)
-                .setMaximumAttempts(10)
-                .build();
         WorkflowClientOptions options = WorkflowClientOptions.newBuilder()
                 .setNamespace(namespace)
                 .build();
