@@ -14,10 +14,10 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
     private final Logger LOG = LoggerFactory.getLogger(OrdersWorkflowImpl.class);
 
     RetryOptions retryOptions = RetryOptions.newBuilder()
-            .setInitialInterval(Duration.ofSeconds(20))
+            .setInitialInterval(Duration.ofSeconds(2))
             .setMaximumInterval(Duration.ofSeconds(120))
             .setBackoffCoefficient(2.0)
-            .setMaximumAttempts(5)
+            .setMaximumAttempts(50)
             .build();
 
     ActivityOptions options = ActivityOptions.newBuilder()
