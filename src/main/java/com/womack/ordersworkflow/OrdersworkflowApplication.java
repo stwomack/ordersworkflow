@@ -72,7 +72,7 @@ public class OrdersworkflowApplication {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 12000)
+    @Scheduled(fixedRate = 9000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         WorkflowOptions options = WorkflowOptions.newBuilder()
                 .setTaskQueue(temporalTaskQueue)
