@@ -1,6 +1,7 @@
 package com.womack.ordersworkflow;
 
 import com.womack.ordersworkflow.activities.OrderActivitiesImpl;
+import com.womack.ordersworkflow.domain.SubmittedOrder;
 import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
 import com.womack.ordersworkflow.workflows.OrdersWorkflow;
 import com.womack.ordersworkflow.workflows.OrdersWorkflowImpl;
@@ -72,16 +73,21 @@ public class OrdersworkflowApplication {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 12000)
+    @Scheduled(fixedRate = 52000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
+        SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
+        StringBuilder stringBuilder = new StringBuilder()
+                .append("SubmittedOrder::")
+                .append(submittedOrder.getOrderNumber());
         WorkflowOptions options = WorkflowOptions.newBuilder()
                 .setTaskQueue(temporalTaskQueue)
+                .setWorkflowId(stringBuilder.toString())
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);
         // This was my first assumption. Keeping it for discussion
         // workflow.processOrder(SubmittedOrderHelper.createSubmittedOrder());
-        WorkflowExecution we = WorkflowClient.start(workflow::processOrder, SubmittedOrderHelper.createSubmittedOrder());
+        WorkflowExecution we = WorkflowClient.start(workflow::processOrder, submittedOrder);
         LOG.info("Order Workflow Submitted: {}:{}", we.getWorkflowId(), we.getRunId());
     }
 

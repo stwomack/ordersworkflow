@@ -5,7 +5,7 @@ import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
 import java.util.List;
 
 public class SubmittedOrder {
-    Long orderNumber;
+    String orderNumber;
     Payment payment;
     List<OrderItem> orderItems;
     List<OrderPackage> orderPackages;
@@ -22,11 +22,11 @@ public class SubmittedOrder {
         this.customer = customer;
     }
 
-    public Long getOrderNumber() {
+    public String getOrderNumber() {
         return orderNumber;
     };
 
-    public void setOrderNumber(long orderNumber) {
+    public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
