@@ -2,8 +2,7 @@
 spring.application.name: ordersworkflow
 orderprocessingservice-url: http://orderprocessing-service/
 temporal:
-  worker:
-    topic: orders-tasks
+  taskQueue: orders-tasks
   target: orders-dev.imu8t.tmprl.cloud:7233
   ns: orders-dev.imu8t
   cert: /usr/local/bin/ca.pem

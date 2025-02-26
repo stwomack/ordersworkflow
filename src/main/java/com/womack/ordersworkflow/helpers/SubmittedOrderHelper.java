@@ -11,6 +11,11 @@ import java.util.Random;
 public class SubmittedOrderHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SubmittedOrderHelper.class);
 
+    public static Long generateOrderNumber() {
+        Random random = new Random();
+        return 10000000L + random.nextLong(90000000L);
+    }
+
     public static SubmittedOrder createSubmittedOrder() {
         Random random = new Random();
         SubmittedOrder order = new SubmittedOrder();

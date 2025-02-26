@@ -7,5 +7,5 @@ import io.temporal.workflow.WorkflowMethod;
 @WorkflowInterface
 public interface OrdersWorkflow {
     @WorkflowMethod
-    OrderActivityResponse processOrder(SubmittedOrder Order);
+    OrderActivityOutput processOrder(SubmittedOrder Order);
 }

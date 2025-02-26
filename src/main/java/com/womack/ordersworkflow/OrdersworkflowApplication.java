@@ -44,8 +44,8 @@ public class OrdersworkflowApplication {
     @Value("${temporal.target}")
     private String target;
 
-    @Value("${temporal.worker.topic}")
-    private String temporalWorkerTopic;
+    @Value("${temporal.taskQueue}")
+    private String temporalTaskQueue;
 
     @Value("${temporal.cert}")
     private String temporalCert;
@@ -63,7 +63,7 @@ public class OrdersworkflowApplication {
     public void startWorker() throws IOException {
         LOG.info("Starting Worker");
         createWorkerFactory();
-        Worker worker = getFactory().newWorker(temporalWorkerTopic);
+        Worker worker = getFactory().newWorker(temporalTaskQueue);
         worker.registerWorkflowImplementationTypes(OrdersWorkflowImpl.class);
         OrderActivitiesImpl orderActivities = new OrderActivitiesImpl();
         orderActivities.setServiceUrl(serviceUrl);
@@ -75,7 +75,7 @@ public class OrdersworkflowApplication {
     @Scheduled(fixedRate = 20000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         WorkflowOptions options = WorkflowOptions.newBuilder()
-                .setTaskQueue(temporalWorkerTopic)
+                .setTaskQueue(temporalTaskQueue)
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);

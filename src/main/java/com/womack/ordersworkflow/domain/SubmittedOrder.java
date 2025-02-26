@@ -1,8 +1,11 @@
 package com.womack.ordersworkflow.domain;
 
+import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
+
 import java.util.List;
 
 public class SubmittedOrder {
+    Long orderNumber;
     Payment payment;
     List<OrderItem> orderItems;
     List<OrderPackage> orderPackages;
@@ -12,18 +15,19 @@ public class SubmittedOrder {
     }
 
     public SubmittedOrder(Payment payment, List<OrderItem> orderItems, List<OrderPackage> orderPackages, Customer customer) {
+        this.setOrderNumber(SubmittedOrderHelper.generateOrderNumber());
         this.payment = payment;
         this.orderItems = orderItems;
         this.orderPackages = orderPackages;
         this.customer = customer;
     }
 
-    public List<OrderPackage> getOrderPackages() {
-        return orderPackages;
-    }
+    public Long getOrderNumber() {
+        return orderNumber;
+    };
 
-    public void setOrderPackages(List<OrderPackage> orderPackages) {
-        this.orderPackages = orderPackages;
+    public void setOrderNumber(long orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public Payment getPayment() {
@@ -48,5 +52,13 @@ public class SubmittedOrder {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<OrderPackage> getOrderPackages() {
+        return orderPackages;
+    }
+
+    public void setOrderPackages(List<OrderPackage> orderPackages) {
+        this.orderPackages = orderPackages;
     }
 }

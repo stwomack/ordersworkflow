@@ -1,9 +1,12 @@
 package com.womack.ordersworkflow.domain;
 
-public class OrderActivityResponse {
+public class OrderActivityOutput {
     String message = "";
 
-    public OrderActivityResponse(String message) {
+    public OrderActivityOutput() {
+    }
+
+    public OrderActivityOutput(String message) {
         this.message = message;
     }
 

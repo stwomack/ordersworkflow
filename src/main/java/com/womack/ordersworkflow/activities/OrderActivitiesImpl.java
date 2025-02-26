@@ -1,7 +1,7 @@
 package com.womack.ordersworkflow.activities;
 
 import com.womack.ordersworkflow.domain.Customer;
-import com.womack.ordersworkflow.domain.OrderActivityResponse;
+import com.womack.ordersworkflow.domain.OrderActivityOutput;
 import com.womack.ordersworkflow.domain.OrderItem;
 import com.womack.ordersworkflow.domain.OrderPackage;
 import com.womack.ordersworkflow.domain.Payment;
@@ -21,32 +21,28 @@ public class OrderActivitiesImpl  implements OrderActivities {
     private final Logger LOG = LoggerFactory.getLogger(OrderActivitiesImpl.class);
 
     @Override
-    public String processPayment(Payment payment) {
+    public OrderActivityOutput processPayment(Payment payment) {
         LOG.info("orderprocessingservice-url {} ", serviceUrl);
         String response = restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
-        OrderActivityResponse oar = new OrderActivityResponse(response);
-        return response;
+        return new OrderActivityOutput(response);
     }
 
     @Override
-    public String checkInventory(List<OrderItem> orderItems) {
+    public OrderActivityOutput checkInventory(List<OrderItem> orderItems) {
         String response = restTemplate.postForObject(serviceUrl + "checkInventory", getHttpEntity(orderItems), String.class);
-        OrderActivityResponse oar = new OrderActivityResponse(response);
-        return response;
+        return new OrderActivityOutput(response);
     }
 
     @Override
-    public String shipPackage(List<OrderPackage> orderPackages) {
+    public OrderActivityOutput shipPackage(List<OrderPackage> orderPackages) {
         String response = restTemplate.postForObject(serviceUrl + "shipPackage", getHttpEntity(orderPackages), String.class);
-        OrderActivityResponse oar = new OrderActivityResponse(response);
-        return response;
+        return new OrderActivityOutput(response);
     }
 
     @Override
-    public String notifyCustomer(Customer customer) {
+    public OrderActivityOutput notifyCustomer(Customer customer) {
         String response = restTemplate.postForObject(serviceUrl + "notifyCustomer", getHttpEntity(customer), String.class);
-        OrderActivityResponse oar = new OrderActivityResponse(response);
-        return response;
+        return new OrderActivityOutput(response);
     }
 
     private static HttpEntity<Object> getHttpEntity(Object object) {
