@@ -11,14 +11,17 @@ import java.util.Random;
 public class SubmittedOrderHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SubmittedOrderHelper.class);
 
-    public static Long generateOrderNumber() {
+    public static String generateOrderNumber() {
         Random random = new Random();
-        return 10000000L + random.nextLong(90000000L);
+        String value = String.valueOf(10000000L + random.nextLong(90000000L));
+        LOG.info("Generated OrderNumber: {}", value);
+        return value;
     }
 
     public static SubmittedOrder createSubmittedOrder() {
         Random random = new Random();
         SubmittedOrder order = new SubmittedOrder();
+        order.setOrderNumber(generateOrderNumber());
         Payment payment = new Payment();
         payment.setName("PaymentID" + random.nextInt(1000));
         order.setPayment(payment);
