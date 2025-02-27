@@ -15,6 +15,7 @@ import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
 import io.temporal.worker.WorkerFactory;
+import io.temporal.workflow.Workflow;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ public class OrdersworkflowApplication {
     @Value("${temporal.key}")
     private String temporalKey;
 
-    private final Logger LOG = LoggerFactory.getLogger(OrdersworkflowApplication.class);
+    public static final Logger LOG = Workflow.getLogger(OrdersworkflowApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(OrdersworkflowApplication.class, args);
@@ -73,7 +74,7 @@ public class OrdersworkflowApplication {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 9000)
+    @Scheduled(fixedRate = 1000000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
         StringBuilder stringBuilder = new StringBuilder()

@@ -6,12 +6,10 @@ import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 
 public class OrdersWorkflowImpl implements OrdersWorkflow {
-    private final Logger LOG = LoggerFactory.getLogger(OrdersWorkflowImpl.class);
+    public static final Logger LOG = Workflow.getLogger(OrdersWorkflowImpl.class);
 
     RetryOptions retryOptions = RetryOptions.newBuilder()
             .setInitialInterval(Duration.ofSeconds(2))

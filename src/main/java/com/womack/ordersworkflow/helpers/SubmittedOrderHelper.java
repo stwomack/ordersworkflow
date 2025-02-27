@@ -1,7 +1,9 @@
 package com.womack.ordersworkflow.helpers;
 
 import com.google.gson.Gson;
+import com.womack.ordersworkflow.activities.OrderActivitiesImpl;
 import com.womack.ordersworkflow.domain.*;
+import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SubmittedOrderHelper {
-    private static final Logger LOG = LoggerFactory.getLogger(SubmittedOrderHelper.class);
+    public static final Logger LOG = Workflow.getLogger(SubmittedOrderHelper.class);
 
     public static String generateOrderNumber() {
         Random random = new Random();

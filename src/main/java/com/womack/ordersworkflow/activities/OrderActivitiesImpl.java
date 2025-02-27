@@ -5,6 +5,8 @@ import com.womack.ordersworkflow.domain.OrderActivityOutput;
 import com.womack.ordersworkflow.domain.OrderItem;
 import com.womack.ordersworkflow.domain.OrderPackage;
 import com.womack.ordersworkflow.domain.Payment;
+import com.womack.ordersworkflow.workflows.OrdersWorkflowImpl;
+import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -16,9 +18,8 @@ import java.util.List;
 
 public class OrderActivitiesImpl  implements OrderActivities {
     private String serviceUrl;
-
     RestTemplate restTemplate = new RestTemplate();
-    private final Logger LOG = LoggerFactory.getLogger(OrderActivitiesImpl.class);
+    public static final Logger LOG = Workflow.getLogger(OrderActivitiesImpl.class);
 
     @Override
     public OrderActivityOutput processPayment(Payment payment) {
