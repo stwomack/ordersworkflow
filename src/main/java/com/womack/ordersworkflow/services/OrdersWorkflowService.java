@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.net.ssl.SSLException;
 import java.io.FileInputStream;
@@ -30,8 +32,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Service
+@RestController
 @EnableScheduling
 public class OrdersWorkflowService {
+    public static final Logger LOG = Workflow.getLogger(OrdersWorkflowService.class);
+
     WorkflowClient client;
     WorkerFactory factory;
 
@@ -53,8 +58,6 @@ public class OrdersWorkflowService {
     @Value("${temporal.key}")
     private String temporalKey;
 
-    public static final Logger LOG = Workflow.getLogger(OrdersWorkflowService.class);
-
     @PostConstruct
     public void startWorker() throws IOException {
         LOG.info("Starting Worker");
@@ -68,7 +71,8 @@ public class OrdersWorkflowService {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 30000)
+    //    @Scheduled(fixedRate = 30000)
+    @PostMapping("/submitOrder")
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
         StringBuilder stringBuilder = new StringBuilder()
