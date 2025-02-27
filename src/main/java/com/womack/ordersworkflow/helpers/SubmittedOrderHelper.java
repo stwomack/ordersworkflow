@@ -13,9 +13,7 @@ public class SubmittedOrderHelper {
 
     public static String generateOrderNumber() {
         Random random = new Random();
-        String value = String.valueOf(10000000L + random.nextLong(90000000L));
-        LOG.info("Generated OrderNumber: {}", value);
-        return value;
+        return String.valueOf(10000000L + random.nextLong(90000000L));
     }
 
     public static SubmittedOrder createSubmittedOrder() {
