@@ -13,5 +13,9 @@ public class OrderActivityOutput {
     public String getMessage() {
         return message;
     }
+
+    public void addMessage(String newMessage) {
+        message = String.join(" -- ", message, newMessage);
+    }
 }
 

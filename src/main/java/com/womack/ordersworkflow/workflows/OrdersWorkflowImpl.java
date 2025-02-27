@@ -28,16 +28,15 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
     @Override
     public OrderActivityOutput processOrder(SubmittedOrder order) {
         LOG.info("Workflow init: {} ", order.toString());
-        OrderActivityOutput paymentStatus = activities.processPayment(order.getPayment());
-        OrderActivityOutput inventoryStatus = activities.checkInventory(order.getOrderItems());
+        OrderActivityOutput orderActivityOutput = activities.processPayment(order.getPayment());
+        orderActivityOutput.addMessage(activities.checkInventory(order.getOrderItems()).getMessage());
         LOG.info("Tired, going to take a nap");
         Workflow.sleep(Duration.ofSeconds(2)); // YOLO
         LOG.info("I feel refreshed");
-        OrderActivityOutput packageStatus = activities.shipPackage(order.getOrderPackages());
-        OrderActivityOutput notificationStatus = activities.notifyCustomer(order.getCustomer());
-        String returnMessage = String.join(" -- ", paymentStatus.getMessage(), inventoryStatus.getMessage(), packageStatus.getMessage(), notificationStatus.getMessage());
-        LOG.info("Status: {}", returnMessage);
-        return new OrderActivityOutput(returnMessage);
+        orderActivityOutput.addMessage(activities.shipPackage(order.getOrderPackages()).getMessage());
+        orderActivityOutput.addMessage(activities.notifyCustomer(order.getCustomer()).getMessage());
+        LOG.info("Status: {}", orderActivityOutput.getMessage());
+        return orderActivityOutput;
     }
 
 }
