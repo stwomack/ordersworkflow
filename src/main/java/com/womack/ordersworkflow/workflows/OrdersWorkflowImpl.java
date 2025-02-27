@@ -2,6 +2,7 @@ package com.womack.ordersworkflow.workflows;
 
 import com.womack.ordersworkflow.activities.OrderActivities;
 import com.womack.ordersworkflow.domain.*;
+import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;
@@ -35,6 +36,7 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
         LOG.info("I feel refreshed");
         orderActivityOutput.addMessage(activities.shipPackage(order.getOrderPackages()).getMessage());
         orderActivityOutput.addMessage(activities.notifyCustomer(order.getCustomer()).getMessage());
+        orderActivityOutput.addMessage("Confirmation Number: " + SubmittedOrderHelper.generateOrderNumber());
         LOG.info("Status: {}", orderActivityOutput.getMessage());
         return orderActivityOutput;
     }
