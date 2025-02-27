@@ -1,11 +1,9 @@
 package com.womack.ordersworkflow.helpers;
 
 import com.google.gson.Gson;
-import com.womack.ordersworkflow.activities.OrderActivitiesImpl;
 import com.womack.ordersworkflow.domain.*;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,7 +32,7 @@ public class SubmittedOrderHelper {
         order.setOrderItems(orderItems);
         ArrayList<OrderPackage> orderPackages = new ArrayList<>();
         OrderPackage orderPackage = new OrderPackage();
-        orderPackage.setName("PackagesID" + random.nextInt(1000));
+        orderPackage.setName("PackagesID: " + random.nextInt(1000));
         orderPackages.add(orderPackage);
         order.setOrderPackages(orderPackages);
         Customer customer = new Customer();
