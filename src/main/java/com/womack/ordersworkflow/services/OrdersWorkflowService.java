@@ -80,6 +80,8 @@ public class OrdersWorkflowService {
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);
+        // Leave this for discussion
+        // workflow.processOrder(submittedOrder);
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, submittedOrder);
         LOG.info("Order Workflow Submitted: {}:{}", we.getWorkflowId(), we.getRunId());
     }
