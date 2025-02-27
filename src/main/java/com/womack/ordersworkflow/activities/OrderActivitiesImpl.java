@@ -5,13 +5,10 @@ import com.womack.ordersworkflow.domain.OrderActivityOutput;
 import com.womack.ordersworkflow.domain.OrderItem;
 import com.womack.ordersworkflow.domain.OrderPackage;
 import com.womack.ordersworkflow.domain.Payment;
-import com.womack.ordersworkflow.workflows.OrdersWorkflowImpl;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import java.util.List;

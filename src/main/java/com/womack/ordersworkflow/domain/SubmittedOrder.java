@@ -14,14 +14,6 @@ public class SubmittedOrder {
     public SubmittedOrder() {
     }
 
-    public SubmittedOrder(Payment payment, List<OrderItem> orderItems, List<OrderPackage> orderPackages, Customer customer) {
-        this.setOrderNumber(SubmittedOrderHelper.generateOrderNumber());
-        this.payment = payment;
-        this.orderItems = orderItems;
-        this.orderPackages = orderPackages;
-        this.customer = customer;
-    }
-
     public String getOrderNumber() {
         return orderNumber;
     };
