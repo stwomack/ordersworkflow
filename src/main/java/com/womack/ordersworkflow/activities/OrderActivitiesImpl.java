@@ -20,7 +20,7 @@ public class OrderActivitiesImpl  implements OrderActivities {
 
     @Override
     public OrderActivityOutput processPayment(Payment payment) {
-        LOG.info("orderprocessingservice-url {} ", serviceUrl);
+        LOG.debug("orderprocessingservice-url {} ", serviceUrl);
         String response = restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
         return new OrderActivityOutput(response);
     }

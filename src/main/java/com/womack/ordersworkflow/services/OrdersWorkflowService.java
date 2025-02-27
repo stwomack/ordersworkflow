@@ -68,7 +68,7 @@ public class OrdersWorkflowService {
         LOG.info("Worker started");
     }
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 300000)
     public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
         SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
         StringBuilder stringBuilder = new StringBuilder()
