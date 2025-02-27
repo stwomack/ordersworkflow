@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tls-secrets
+type: Opaque
+stringData:
+  ca.pem: |
+    -----BEGIN CERTIFICATE-----
+        Your ca.pem contents here
+    -----END CERTIFICATE-----
+  ca.key: |
+    -----BEGIN PRIVATE KEY-----
+        Your ca.pem contents here
+    -----END PRIVATE KEY-----
