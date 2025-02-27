@@ -1,7 +1,5 @@
 package com.womack.ordersworkflow.domain;
 
-import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
-
 import java.util.List;
 
 public class SubmittedOrder {
