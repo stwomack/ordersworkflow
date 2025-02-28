@@ -87,7 +87,7 @@ public class OrdersWorkflowService {
         // Leave this for discussion
         // workflow.processOrder(submittedOrder);
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, submittedOrder);
-        LOG.info("Order Workflow Submitted: {}:{}", we.getWorkflowId(), we.getRunId());
+        LOG.info("Order Workflow Submitted: {}::{}", we.getWorkflowId(), we.getRunId());
     }
 
     private void createWorkerFactory() throws FileNotFoundException, SSLException {

@@ -20,7 +20,7 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
             .build();
 
     ActivityOptions options = ActivityOptions.newBuilder()
-            .setStartToCloseTimeout(Duration.ofSeconds(5))
+            .setStartToCloseTimeout(Duration.ofSeconds(10)) //TODO Discuss. This began with separation
             .setRetryOptions(retryOptions)
             .build();
 
