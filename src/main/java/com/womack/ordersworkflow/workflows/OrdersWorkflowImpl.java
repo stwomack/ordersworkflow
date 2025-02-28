@@ -15,8 +15,8 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
     private OrderActivities orderActivities;
     ActivityOptions orderActivityOptions;
 
-    @PostConstruct
-    public void setup() {
+    @Override
+    public OrderActivityOutput processOrder(SubmittedOrder order) {
         RetryOptions retryOptions = RetryOptions.newBuilder()
                 .setInitialInterval(Duration.ofSeconds(2))
                 .setMaximumInterval(Duration.ofSeconds(120))
@@ -29,10 +29,6 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
                 .setRetryOptions(retryOptions)
                 .build();
         orderActivityOptions = options;
-    }
-
-    @Override
-    public OrderActivityOutput processOrder(SubmittedOrder order) {
         orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
         LOG.info("Workflow init: {} ", order.toString());
         OrderActivityOutput orderActivityOutput = orderActivities.processPayment(order.getPayment());
