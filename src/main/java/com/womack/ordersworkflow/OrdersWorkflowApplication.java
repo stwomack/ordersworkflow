@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OrdersworkflowApplication {
+public class OrdersWorkflowApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OrdersworkflowApplication.class, args);
+        SpringApplication.run(OrdersWorkflowApplication.class, args);
     }
 }
