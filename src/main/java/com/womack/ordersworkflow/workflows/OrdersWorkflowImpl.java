@@ -13,6 +13,7 @@ import java.time.Duration;
 public class OrdersWorkflowImpl implements OrdersWorkflow {
     public static final Logger LOG = Workflow.getLogger(OrdersWorkflowImpl.class);
     private OrderActivities orderActivities;
+    ActivityOptions orderActivityOptions;
 
     @PostConstruct
     public void setup() {
@@ -27,12 +28,12 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
                 .setStartToCloseTimeout(Duration.ofSeconds(10)) //TODO Discuss. This began with separation
                 .setRetryOptions(retryOptions)
                 .build();
-
-        orderActivities = Workflow.newActivityStub(OrderActivities.class, options);
+        orderActivityOptions = options;
     }
 
     @Override
     public OrderActivityOutput processOrder(SubmittedOrder order) {
+        orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
         LOG.info("Workflow init: {} ", order.toString());
         OrderActivityOutput orderActivityOutput = orderActivities.processPayment(order.getPayment());
         orderActivityOutput.addMessage(orderActivities.checkInventory(order.getOrderItems()).getMessage());
