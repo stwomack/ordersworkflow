@@ -73,7 +73,7 @@ public class OrdersWorkflowService {
 
     @PostMapping("/submitOrder")
 //    @Scheduled(fixedRate = 20000)
-    public void generateOrderWorkflow() throws FileNotFoundException, SSLException {
+    public void generateOrderWorkflow() {
         SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
         StringBuilder stringBuilder = new StringBuilder()
                 .append("SubmittedOrder::")
