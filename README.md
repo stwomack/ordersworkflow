@@ -6,7 +6,8 @@
   * ```./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=8081 -Dorderprocessingservice-url=http://localhost:8080/'```
 * The orderprocessingservice will be started as follows:
   * ```./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=8080 -Dordersworkflow-url=http://localhost:8081/' ```
-* Backing service can be found here: https://github.com/stwomack/orderprocessingservice
-* New workflow instances are kicked off via the web page of the service app now
+* The backing service can be found here: https://github.com/stwomack/orderprocessingservice
+* New workflow instances are kicked off via the web page of the service app
+  * Just hit http://localhost:8080/ in a browser and push the red button to kick off instances
 * Your temporal cloud endpoint and ns can be configured in application.yaml:
 https://github.com/stwomack/ordersworkflow/blob/main/src/main/resources/application.yaml
