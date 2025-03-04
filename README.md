@@ -4,8 +4,9 @@
   * To easily generate these files, use `tcld gen ca --org temporal -d 1y --ca-cert ca.pem --ca-key ca.key`
 * If running both services on localhost, you can override the service url as follows:
   * ```./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=8081 -Dorderprocessingservice-url=http://localhost:8080/'```
+* The orderprocessingservice will be started as follows:
+  * ```./mvnw spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=8080 -Dordersworkflow-url=http://localhost:8081/' ```
 * Backing service can be found here: https://github.com/stwomack/orderprocessingservice
-* No longer true: New workflows are kicked off every 20 seconds via @Scheduled(fixedRate = 20000) - I should extract that to a property but haven't yet
 * New workflow instances are kicked off via the web page of the service app now
 * Your temporal cloud endpoint and ns can be configured in application.yaml:
 https://github.com/stwomack/ordersworkflow/blob/main/src/main/resources/application.yaml

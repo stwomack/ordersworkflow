@@ -3,10 +3,8 @@ spring.application.name: ordersworkflow
 orderprocessingservice-url: http://orderprocessing-service/
 temporal:
   taskQueue: orders-tasks
-#  target: orders-prod.ydusq.tmprl.cloud:7233
-  target: orders-dev.ydusq.tmprl.cloud:7233
-#  ns: orders-prod.ydusq
-  ns: orders-dev.ydusq
+  target: orders-dev.imu8t.tmprl.cloud:7233
+  ns: orders-dev.imu8t
   cert: /usr/local/bin/ca.pem
   key: /usr/local/bin/ca.key
 logging:
