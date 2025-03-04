@@ -2,7 +2,7 @@ package com.womack.ordersworkflow.activities;
 
 import com.womack.ordersworkflow.domain.*;
 import io.temporal.testing.TestActivityEnvironment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -20,27 +20,17 @@ public class OrderActivitiesImplTest {
     }
 
     @AfterEach
-    public void destroy() {
+    void destroy() {
         testEnvironment.close();
     }
 
     @Test
-    public void testProcessPayment() {
+    void testProcessPayment() {
         Payment payment = new Payment();
         payment.setName("Payment 1234");
         OrderActivityOutput result = activities.processPayment(payment);
-        assertEquals("Payment Burped", result.getMessage()); // WTF?
+        assertEquals("Payment", result.getMessage());
     }
 
-    @Test
-    public void testCheckInventory() {
-    }
 
-    @Test
-    public void testShipPackage() {
-    }
-
-    @Test
-    public void testNotifyCustomer() {
-    }
 }
