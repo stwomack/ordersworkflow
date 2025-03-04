@@ -15,5 +15,6 @@
   * Just hit http://localhost:8080/ in a browser and push the red button to kick off individual workload executions
 
 #### If running in kubernetes, just apply both deployments, and the service for the orderprocessingservice
+* If running on one of of the clouds, you'll get a loadbalancer for your orderprocessingservice web page
 * If running in kind, you'll need to use port-forwarding to access the web page
   * This whole demo gets tricky because of kind networking. YMMV
