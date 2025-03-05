@@ -69,7 +69,7 @@ public class OrdersWorkflowService {
     }
 
     @PostMapping("/submitOrder")
-//    @Scheduled(fixedRate = 20000)
+    // @Scheduled(fixedRate = 20000)
     public void generateOrderWorkflow() {
         SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
         StringBuilder stringBuilder = new StringBuilder()
@@ -81,8 +81,6 @@ public class OrdersWorkflowService {
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);
-        // Leave this for discussion
-        // workflow.processOrder(submittedOrder);
         WorkflowExecution we = WorkflowClient.start(workflow::processOrder, submittedOrder);
         LOG.info("Order Workflow Submitted: {}::{}", we.getWorkflowId(), we.getRunId());
     }

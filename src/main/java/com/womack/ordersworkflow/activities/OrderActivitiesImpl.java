@@ -19,15 +19,15 @@ public class OrderActivitiesImpl  implements OrderActivities {
     public static final Logger LOG = LoggerFactory.getLogger(OrderActivitiesImpl.class);
 
     @Override
-    public OrderActivityOutput processPayment(Payment payment) {
-        LOG.debug("orderprocessingservice-url {} ", serviceUrl);
-        String response = restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
+    public OrderActivityOutput checkInventory(List<OrderItem> orderItems) {
+        String response = restTemplate.postForObject(serviceUrl + "checkInventory", getHttpEntity(orderItems), String.class);
         return new OrderActivityOutput(response);
     }
 
     @Override
-    public OrderActivityOutput checkInventory(List<OrderItem> orderItems) {
-        String response = restTemplate.postForObject(serviceUrl + "checkInventory", getHttpEntity(orderItems), String.class);
+    public OrderActivityOutput processPayment(Payment payment) {
+        LOG.debug("orderprocessingservice-url {} ", serviceUrl);
+        String response = restTemplate.postForObject(serviceUrl + "processPayment", getHttpEntity(payment), String.class);
         return new OrderActivityOutput(response);
     }
 

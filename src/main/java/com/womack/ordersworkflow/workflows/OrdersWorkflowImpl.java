@@ -24,14 +24,14 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
                 .build();
 
         ActivityOptions options = ActivityOptions.newBuilder()
-                .setStartToCloseTimeout(Duration.ofSeconds(10)) //TODO Discuss. This began with separation
+                .setStartToCloseTimeout(Duration.ofSeconds(5))
                 .setRetryOptions(retryOptions)
                 .build();
         orderActivityOptions = options;
         orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
         LOG.info("Workflow init: {} ", order.toString());
-        OrderActivityOutput orderActivityOutput = orderActivities.processPayment(order.getPayment());
-        orderActivityOutput.addMessage(orderActivities.checkInventory(order.getOrderItems()).getMessage());
+        OrderActivityOutput orderActivityOutput = orderActivities.checkInventory(order.getOrderItems());
+        orderActivityOutput.addMessage(orderActivities.processPayment(order.getPayment()).getMessage());
         LOG.info("Tired, going to take a nap");
         Workflow.sleep(Duration.ofSeconds(2)); // YOLO
         LOG.info("I feel refreshed");
