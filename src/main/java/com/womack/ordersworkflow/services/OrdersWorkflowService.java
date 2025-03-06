@@ -60,6 +60,7 @@ public class OrdersWorkflowService {
         LOG.info("Starting Worker");
         createWorkerFactory();
         Worker worker = getFactory().newWorker(temporalTaskQueue);
+        worker.registerWorkflowImplementationTypes();
         worker.registerWorkflowImplementationTypes(OrdersWorkflowImpl.class);
         OrderActivitiesImpl orderActivities = new OrderActivitiesImpl();
         orderActivities.setServiceUrl(serviceUrl);
