@@ -11,7 +11,5 @@ public interface OrderActivities {
 
     OrderActivityOutput checkInventory(List<OrderItem> orderItems);
 
-    OrderActivityOutput shipPackage(List<OrderPackage> orderPackages);
-
     OrderActivityOutput notifyCustomer(Customer customer);
 }

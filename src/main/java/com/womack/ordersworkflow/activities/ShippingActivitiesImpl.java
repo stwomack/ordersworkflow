@@ -1,23 +1,15 @@
 package com.womack.ordersworkflow.activities;
 
-import com.womack.ordersworkflow.workflows.ShippingWorkflow;
-import com.womack.ordersworkflow.workflows.ShippingWorkflow.ShippingActivities;
+import com.womack.ordersworkflow.domain.OrderActivityOutput;
+import com.womack.ordersworkflow.domain.OrderPackage;
 
+import java.util.List;
 
-public class ShippingActivitiesImpl implements ShippingWorkflow.ShippingActivities {
-
-    @Override
-    public void packageOrder(String orderId) {
-        System.out.println("Packaging order: " + orderId);
-    }
+public class ShippingActivitiesImpl implements ShippingActivities {
 
     @Override
-    public void shipOrder(String orderId) {
-        System.out.println("Shipping order: " + orderId);
+    public OrderActivityOutput shipPackage(List<OrderPackage> orderPackages) {
+        return new OrderActivityOutput("Package Shipped");
     }
 
-    @Override
-    public void sendShippingConfirmation(String orderId) {
-        System.out.println("Sending shipping confirmation for order: " + orderId);
-    }
 }

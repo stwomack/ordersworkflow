@@ -1,5 +1,6 @@
 package com.womack.ordersworkflow.workflows;
 
+import com.womack.ordersworkflow.activities.ShippingActivities;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;

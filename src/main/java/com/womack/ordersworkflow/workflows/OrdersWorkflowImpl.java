@@ -4,6 +4,8 @@ import com.womack.ordersworkflow.activities.OrderActivities;
 import com.womack.ordersworkflow.domain.*;
 import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
 import io.temporal.activity.ActivityOptions;
+import io.temporal.client.WorkflowClient;
+import io.temporal.client.WorkflowOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;
@@ -35,7 +37,14 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
         LOG.info("Tired, going to take a nap");
         Workflow.sleep(Duration.ofSeconds(2)); // YOLO
         LOG.info("I feel refreshed");
-        orderActivityOutput.addMessage(orderActivities.shipPackage(order.getOrderPackages()).getMessage());
+        // Start the Shipping Sub-Workflow
+        WorkflowClient client = Workflow.newExternalWorkflowStub(WorkflowClient.class);
+        ShippingWorkflow shippingWorkflow = client.newWorkflowStub(
+                ShippingWorkflow.class,
+                WorkflowOptions.newBuilder().setWorkflowId("shipping-" + order.getOrderNumber()).build());
+
+        shippingWorkflow.processShipping(order.getOrderNumber());
+
         orderActivityOutput.addMessage(orderActivities.notifyCustomer(order.getCustomer()).getMessage());
         orderActivityOutput.addMessage("Confirmation Number: " + SubmittedOrderHelper.generateOrderNumber());
         LOG.info("Status: {}", orderActivityOutput.getMessage());
