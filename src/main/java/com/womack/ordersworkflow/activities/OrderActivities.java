@@ -14,4 +14,6 @@ public interface OrderActivities {
     OrderActivityOutput shipPackage(List<OrderPackage> orderPackages);
 
     OrderActivityOutput notifyCustomer(Customer customer);
+
+    void setStatus(OrderConfirmation orderConfirmation);
 }

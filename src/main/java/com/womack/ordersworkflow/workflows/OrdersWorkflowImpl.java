@@ -11,7 +11,6 @@ import java.time.Duration;
 
 public class OrdersWorkflowImpl implements OrdersWorkflow {
     public static final Logger LOG = Workflow.getLogger(OrdersWorkflowImpl.class);
-    private OrderActivities orderActivities;
     ActivityOptions orderActivityOptions;
 
     @Override
@@ -23,13 +22,15 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
                 .setMaximumAttempts(50)
                 .build();
 
-        ActivityOptions options = ActivityOptions.newBuilder()
+        orderActivityOptions = ActivityOptions.newBuilder()
                 .setStartToCloseTimeout(Duration.ofSeconds(5))
                 .setRetryOptions(retryOptions)
                 .build();
-        orderActivityOptions = options;
-        orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
+        OrderActivities orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
         LOG.info("Workflow init: {} ", order.toString());
+        String confirmationNumber = SubmittedOrderHelper.generateOrderNumber();
+        OrderConfirmation orderConfirmation = new OrderConfirmation(confirmationNumber, OrderConfirmation.OrderStatus.WORKING);
+        orderActivities.setStatus(orderConfirmation);
         OrderActivityOutput orderActivityOutput = orderActivities.checkInventory(order.getOrderItems());
         orderActivityOutput.addMessage(orderActivities.processPayment(order.getPayment()).getMessage());
         LOG.info("Tired, going to take a nap");
@@ -37,9 +38,10 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
         LOG.info("I feel refreshed");
         orderActivityOutput.addMessage(orderActivities.shipPackage(order.getOrderPackages()).getMessage());
         orderActivityOutput.addMessage(orderActivities.notifyCustomer(order.getCustomer()).getMessage());
-        orderActivityOutput.addMessage("Confirmation Number: " + SubmittedOrderHelper.generateOrderNumber());
+        orderActivityOutput.addMessage("Confirmation Number: " + confirmationNumber);
+        orderConfirmation.setStatus(OrderConfirmation.OrderStatus.COMPLETED);
+        orderActivities.setStatus(orderConfirmation);
         LOG.info("Status: {}", orderActivityOutput.getMessage());
         return orderActivityOutput;
     }
-
 }

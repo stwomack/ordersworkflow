@@ -18,7 +18,9 @@ import io.temporal.worker.WorkerFactory;
 import io.temporal.workflow.Workflow;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +35,9 @@ import java.io.InputStream;
 @EnableScheduling
 public class OrdersWorkflowService {
     public static final Logger LOG = Workflow.getLogger(OrdersWorkflowService.class);
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     WorkflowClient client;
     WorkerFactory factory;
@@ -61,7 +66,8 @@ public class OrdersWorkflowService {
         createWorkerFactory();
         Worker worker = getFactory().newWorker(temporalTaskQueue);
         worker.registerWorkflowImplementationTypes(OrdersWorkflowImpl.class);
-        OrderActivitiesImpl orderActivities = new OrderActivitiesImpl();
+        OrderActivitiesRepositoryService orderActivitiesRepositoryService = applicationContext.getBean(OrderActivitiesRepositoryService.class);
+        OrderActivitiesImpl orderActivities = new OrderActivitiesImpl(orderActivitiesRepositoryService);
         orderActivities.setServiceUrl(serviceUrl);
         worker.registerActivitiesImplementations(orderActivities);
         factory.start();
