@@ -1,47 +1,102 @@
 package com.womack.ordersworkflow.activities;
 
 import com.womack.ordersworkflow.domain.*;
+import com.womack.ordersworkflow.services.OrderActivitiesRepositoryService;
 import io.temporal.testing.TestActivityEnvironment;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.client.RestTemplate;
 
-public class OrderActivitiesImplTest {
-    private TestActivityEnvironment testEnvironment;
-    private OrderActivities activities;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+class OrderActivitiesImplTest {
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private OrderActivitiesRepositoryService orderActivitiesRepositoryService;
+
+    @InjectMocks
     private OrderActivitiesImpl orderActivitiesImpl;
 
+    private TestActivityEnvironment testActivityEnvironment;
+
     @BeforeEach
-    public void init() {
-        testEnvironment = TestActivityEnvironment.newInstance();
-        orderActivitiesImpl = Mockito.mock(OrderActivitiesImpl.class);
-        testEnvironment.registerActivitiesImplementations(orderActivitiesImpl);
-        activities = testEnvironment.newActivityStub(OrderActivities.class);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        testActivityEnvironment = TestActivityEnvironment.newInstance();
+        orderActivitiesImpl = new OrderActivitiesImpl(orderActivitiesRepositoryService, restTemplate);
+        orderActivitiesImpl.setServiceUrl("http://localhost:8080/");
+        testActivityEnvironment.registerActivitiesImplementations(orderActivitiesImpl);
     }
 
-    @AfterEach
-    void destroy() {
-        testEnvironment.close();
+    @Test
+    void testCheckInventory() {
+        List<OrderItem> orderItems = List.of(new OrderItem());
+        when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
+                .thenReturn("Inventory Check Passed");
+
+        OrderActivities activities = testActivityEnvironment.newActivityStub(OrderActivities.class);
+        OrderActivityOutput result = activities.checkInventory(orderItems);
+
+        assertEquals("Inventory Check Passed", result.getMessage());
+        verify(restTemplate).postForObject(anyString(), any(), eq(String.class));
     }
 
     @Test
     void testProcessPayment() {
-        String paymentReturnValue = "Payment 1234";
         Payment payment = new Payment();
-        payment.setName(paymentReturnValue);
+        when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
+                .thenReturn("Payment Successful");
 
-        OrderActivityOutput orderActivityOutput = new OrderActivityOutput(paymentReturnValue);
-        when(orderActivitiesImpl.processPayment(payment)).thenReturn(orderActivityOutput);
+        OrderActivities activities = testActivityEnvironment.newActivityStub(OrderActivities.class);
+        OrderActivityOutput result = activities.processPayment(payment);
 
-        OrderActivities mockActivities = mock(OrderActivities.class);
-        when(mockActivities.processPayment(payment)).thenReturn(orderActivityOutput);
+        assertEquals("Payment Successful", result.getMessage());
+        verify(restTemplate).postForObject(anyString(), any(), eq(String.class));
+    }
 
-        OrderActivityOutput result = mockActivities.processPayment(payment);
-        assertEquals(paymentReturnValue, result.getMessage());
+    @Test
+    void testShipPackage() {
+        List<OrderPackage> orderPackages = List.of(new OrderPackage());
+        when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
+                .thenReturn("Package Shipped Successfully");
 
-        verify(mockActivities, times(1)).processPayment(payment);
+        OrderActivities activities = testActivityEnvironment.newActivityStub(OrderActivities.class);
+        OrderActivityOutput result = activities.shipPackage(orderPackages);
+
+        assertEquals("Package Shipped Successfully", result.getMessage());
+        verify(restTemplate).postForObject(anyString(), any(), eq(String.class));
+    }
+
+    @Test
+    void testNotifyCustomer() {
+        Customer customer = new Customer();
+        when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
+                .thenReturn("Customer Successfully Notified");
+
+        OrderActivities activities = testActivityEnvironment.newActivityStub(OrderActivities.class);
+        OrderActivityOutput result = activities.notifyCustomer(customer);
+
+        assertEquals("Customer Successfully Notified", result.getMessage());
+        verify(restTemplate).postForObject(anyString(), any(), eq(String.class));
+    }
+
+    @Test
+    void testSetStatus() {
+        OrderConfirmation orderConfirmation = new OrderConfirmation();
+
+        orderActivitiesImpl.setStatus(orderConfirmation);
+
+        verify(orderActivitiesRepositoryService).saveOrderConfirmation(orderConfirmation);
     }
 }

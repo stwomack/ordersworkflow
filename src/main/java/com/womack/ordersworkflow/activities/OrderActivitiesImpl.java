@@ -9,15 +9,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-public class OrderActivitiesImpl  implements OrderActivities {
+public class OrderActivitiesImpl implements OrderActivities {
     private String serviceUrl;
-    RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     public static final Logger LOG = LoggerFactory.getLogger(OrderActivitiesImpl.class);
 
-    OrderActivitiesRepositoryService orderActivitiesRepositoryService;
+    private final OrderActivitiesRepositoryService orderActivitiesRepositoryService;
 
-    public OrderActivitiesImpl(OrderActivitiesRepositoryService orderActivitiesRepositoryService) {
+    public OrderActivitiesImpl(OrderActivitiesRepositoryService orderActivitiesRepositoryService, RestTemplate restTemplate) {
         this.orderActivitiesRepositoryService = orderActivitiesRepositoryService;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -53,5 +54,4 @@ public class OrderActivitiesImpl  implements OrderActivities {
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
-
 }

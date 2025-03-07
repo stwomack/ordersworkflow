@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLException;
 import java.io.FileInputStream;
@@ -38,6 +39,9 @@ public class OrdersWorkflowService {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     WorkflowClient client;
     WorkerFactory factory;
@@ -67,7 +71,7 @@ public class OrdersWorkflowService {
         Worker worker = getFactory().newWorker(temporalTaskQueue);
         worker.registerWorkflowImplementationTypes(OrdersWorkflowImpl.class);
         OrderActivitiesRepositoryService orderActivitiesRepositoryService = applicationContext.getBean(OrderActivitiesRepositoryService.class);
-        OrderActivitiesImpl orderActivities = new OrderActivitiesImpl(orderActivitiesRepositoryService);
+        OrderActivitiesImpl orderActivities = new OrderActivitiesImpl(orderActivitiesRepositoryService, restTemplate);
         orderActivities.setServiceUrl(serviceUrl);
         worker.registerActivitiesImplementations(orderActivities);
         factory.start();
