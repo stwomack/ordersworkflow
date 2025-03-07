@@ -3,6 +3,7 @@ package com.womack.ordersworkflow.activities;
 import com.womack.ordersworkflow.domain.*;
 import com.womack.ordersworkflow.services.OrderActivitiesRepositoryService;
 import io.temporal.testing.TestActivityEnvironment;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -50,6 +51,11 @@ class OrderActivitiesImplTest {
 
         assertEquals("Inventory Check Passed", result.getMessage());
         verify(restTemplate).postForObject(anyString(), any(), eq(String.class));
+    }
+
+    @AfterEach
+    public void destroy() {
+        testActivityEnvironment.close();
     }
 
     @Test

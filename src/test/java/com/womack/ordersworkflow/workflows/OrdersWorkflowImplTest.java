@@ -7,6 +7,7 @@ import io.temporal.testing.TestWorkflowEnvironment;
 import io.temporal.worker.Worker;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -26,7 +27,7 @@ public class OrdersWorkflowImplTest {
     @BeforeEach
     public void setUp() {
         testEnvironment = TestWorkflowEnvironment.newInstance();
-        Worker worker = testEnvironment.newWorker("OrdersTaskQueue");
+        Worker worker = testEnvironment.newWorker("orders-tasks");
         orderActivities = Mockito.mock(OrderActivities.class);
         worker.registerActivitiesImplementations(orderActivities);
         worker.registerWorkflowImplementationTypes(OrdersWorkflowImpl.class);
@@ -34,9 +35,14 @@ public class OrdersWorkflowImplTest {
 
         WorkflowClient workflowClient = testEnvironment.getWorkflowClient();
         WorkflowOptions workflowOptions = WorkflowOptions.newBuilder()
-                .setTaskQueue("OrdersTaskQueue")
+                .setTaskQueue("orders-tasks")
                 .build();
         ordersWorkflow = workflowClient.newWorkflowStub(OrdersWorkflow.class, workflowOptions);
+    }
+
+    @AfterEach
+    public void destroy() {
+        testEnvironment.close();
     }
 
     @Test
