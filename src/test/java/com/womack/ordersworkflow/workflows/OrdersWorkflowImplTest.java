@@ -54,11 +54,10 @@ public class OrdersWorkflowImplTest {
         order.setOrderPackages(new ArrayList<>());
 
         Mockito.when(orderActivities.checkInventory(any())).thenReturn(new OrderActivityOutput("Inventory checked"));
-        Mockito.when(orderActivities.processPayment(any())).thenReturn(new OrderActivityOutput("Payment processed"));
+        Mockito.when(orderActivities.processPayment(any(), any())).thenReturn(new OrderActivityOutput("Payment processed"));
         Mockito.when(orderActivities.shipPackage(any())).thenReturn(new OrderActivityOutput("Package shipped"));
         Mockito.when(orderActivities.notifyCustomer(any())).thenReturn(new OrderActivityOutput("Customer notified"));
 
-        // Mock the static method SubmittedOrderHelper.generateOrderNumber
         try (MockedStatic<SubmittedOrderHelper> mockedHelper = Mockito.mockStatic(SubmittedOrderHelper.class)) {
             mockedHelper.when(SubmittedOrderHelper::generateOrderNumber).thenReturn("12345678");
 

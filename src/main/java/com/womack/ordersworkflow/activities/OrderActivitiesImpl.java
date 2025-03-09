@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OrderActivitiesImpl implements OrderActivities {
     private String serviceUrl;
@@ -28,7 +29,13 @@ public class OrderActivitiesImpl implements OrderActivities {
     }
 
     @Override
-    public OrderActivityOutput processPayment(Payment payment) {
+    public OrderActivityOutput processPayment(String confirmationNumber, Payment payment) {
+        //TODO Realistically, the next two methods would do these checks as well. Stopping here for now
+        if (Objects.equals(orderActivitiesRepositoryService.getStatus(confirmationNumber), OrderConfirmation.OrderStatus.PROCESS_PAYMENT_WORKING.toString())) {
+            return new OrderActivityOutput("Payment previously processed");
+        }
+        OrderConfirmation orderConfirmation = new OrderConfirmation(confirmationNumber, OrderConfirmation.OrderStatus.PROCESS_PAYMENT_COMPLETE);
+        setStatus(orderConfirmation);
         LOG.debug("orderprocessingservice-url {} ", serviceUrl);
         String response = restTemplate.postForObject(serviceUrl + "processPayment", HttpHelper.getHttpEntity(payment), String.class);
         return new OrderActivityOutput(response);
@@ -44,6 +51,11 @@ public class OrderActivitiesImpl implements OrderActivities {
     public OrderActivityOutput notifyCustomer(Customer customer) {
         String response = restTemplate.postForObject(serviceUrl + "notifyCustomer", HttpHelper.getHttpEntity(customer), String.class);
         return new OrderActivityOutput(response);
+    }
+
+    @Override
+    public String getStatus(String confirmationNumber) {
+        return orderActivitiesRepositoryService.getStatus(confirmationNumber);
     }
 
     @Override

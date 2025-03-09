@@ -21,4 +21,8 @@ public class OrderActivitiesRepositoryService {
     public void saveOrderConfirmation(OrderConfirmation orderConfirmation) {
         orderStatusRepository.save(orderConfirmation);
     }
+
+    public String getStatus(String confirmationNumber) {
+        return orderStatusRepository.findById(confirmationNumber).toString();
+    }
 }

@@ -40,8 +40,8 @@ public class OrderConfirmation {
     }
 
     public enum OrderStatus {
-        WORKING,
-        COMPLETED,
-        FAILED;
+        PROCESS_PAYMENT_WORKING,
+        PROCESS_PAYMENT_COMPLETE,
+        PROCESS_PAYMENT_FAILED;
     }
 }

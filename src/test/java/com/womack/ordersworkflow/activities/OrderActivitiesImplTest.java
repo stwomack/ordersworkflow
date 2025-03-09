@@ -65,7 +65,7 @@ class OrderActivitiesImplTest {
                 .thenReturn("Payment Successful");
 
         OrderActivities activities = testActivityEnvironment.newActivityStub(OrderActivities.class);
-        OrderActivityOutput result = activities.processPayment(payment);
+        OrderActivityOutput result = activities.processPayment("12345", payment);
 
         assertEquals("Payment Successful", result.getMessage());
         verify(restTemplate).postForObject(anyString(), any(), eq(String.class));

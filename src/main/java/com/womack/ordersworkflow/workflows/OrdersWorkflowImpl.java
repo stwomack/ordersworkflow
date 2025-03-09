@@ -29,18 +29,14 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
         OrderActivities orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
         LOG.info("Workflow init: {} ", order.toString());
         String confirmationNumber = SubmittedOrderHelper.generateOrderNumber();
-        OrderConfirmation orderConfirmation = new OrderConfirmation(confirmationNumber, OrderConfirmation.OrderStatus.WORKING);
-        orderActivities.setStatus(orderConfirmation);
         OrderActivityOutput orderActivityOutput = orderActivities.checkInventory(order.getOrderItems());
-        orderActivityOutput.addMessage(orderActivities.processPayment(order.getPayment()).getMessage());
+        orderActivityOutput.addMessage(orderActivities.processPayment(confirmationNumber, order.getPayment()).getMessage());
         LOG.info("Tired, going to take a nap");
         Workflow.sleep(Duration.ofSeconds(2)); // YOLO
         LOG.info("I feel refreshed");
         orderActivityOutput.addMessage(orderActivities.shipPackage(order.getOrderPackages()).getMessage());
         orderActivityOutput.addMessage(orderActivities.notifyCustomer(order.getCustomer()).getMessage());
         orderActivityOutput.addMessage("Confirmation Number: " + confirmationNumber);
-        orderConfirmation.setStatus(OrderConfirmation.OrderStatus.COMPLETED);
-        orderActivities.setStatus(orderConfirmation);
         LOG.info("Status: {}", orderActivityOutput.getMessage());
         return orderActivityOutput;
     }
