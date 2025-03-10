@@ -2,6 +2,7 @@ package com.womack.ordersworkflow.activities;
 
 import com.womack.ordersworkflow.domain.*;
 import com.womack.ordersworkflow.helpers.HttpHelper;
+import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
 import com.womack.ordersworkflow.services.OrderActivitiesRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,11 @@ public class OrderActivitiesImpl implements OrderActivities {
     @Override
     public void setStatus(OrderConfirmation orderConfirmation) {
         orderActivitiesRepositoryService.saveOrderConfirmation(orderConfirmation);
+    }
+
+    @Override
+    public String generateOrderNumber() {
+        return SubmittedOrderHelper.generateOrderNumber();
     }
 
     public void setServiceUrl(String serviceUrl) {

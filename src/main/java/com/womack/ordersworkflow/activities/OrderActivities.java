@@ -18,4 +18,6 @@ public interface OrderActivities {
     String getStatus(String confirmationNumber);
 
     void setStatus(OrderConfirmation orderConfirmation);
+
+    String generateOrderNumber();
 }

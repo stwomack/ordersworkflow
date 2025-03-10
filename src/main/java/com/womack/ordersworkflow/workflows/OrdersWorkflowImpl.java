@@ -28,7 +28,7 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
                 .build();
         OrderActivities orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
         LOG.info("Workflow init: {} ", order.toString());
-        String confirmationNumber = SubmittedOrderHelper.generateOrderNumber();
+        String confirmationNumber = orderActivities.generateOrderNumber();
         OrderActivityOutput orderActivityOutput = orderActivities.checkInventory(order.getOrderItems());
         orderActivityOutput.addMessage(orderActivities.processPayment(confirmationNumber, order.getPayment()).getMessage());
         LOG.info("Tired, going to take a nap");
