@@ -31,14 +31,15 @@ public class OrderActivitiesImpl implements OrderActivities {
 
     @Override
     public OrderActivityOutput processPayment(String confirmationNumber, Payment payment) {
-        //TODO Realistically, the next two methods would do these checks as well. Stopping here for now
-        if (Objects.equals(orderActivitiesRepositoryService.getStatus(confirmationNumber), OrderConfirmation.OrderStatus.PROCESS_PAYMENT_WORKING.toString())) {
+        //TODO Realistically, the next two activities would do these checks as well. Stopping here for now
+        if (Objects.equals(orderActivitiesRepositoryService.getStatus(confirmationNumber), OrderConfirmation.OrderStatus.PROCESS_PAYMENT_COMPLETE.toString())) {
             return new OrderActivityOutput("Payment previously processed");
         }
-        OrderConfirmation orderConfirmation = new OrderConfirmation(confirmationNumber, OrderConfirmation.OrderStatus.PROCESS_PAYMENT_COMPLETE);
+        OrderConfirmation orderConfirmation = new OrderConfirmation(confirmationNumber, OrderConfirmation.OrderStatus.PROCESS_PAYMENT_WORKING);
         setStatus(orderConfirmation);
-        LOG.debug("orderprocessingservice-url {} ", serviceUrl);
         String response = restTemplate.postForObject(serviceUrl + "processPayment", HttpHelper.getHttpEntity(payment), String.class);
+        orderConfirmation = new OrderConfirmation(confirmationNumber, OrderConfirmation.OrderStatus.PROCESS_PAYMENT_COMPLETE);
+        setStatus(orderConfirmation);
         return new OrderActivityOutput(response);
     }
 
