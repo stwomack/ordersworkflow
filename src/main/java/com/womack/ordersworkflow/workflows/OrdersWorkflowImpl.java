@@ -34,6 +34,7 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
         LOG.info("Tired, going to take a nap");
         Workflow.sleep(Duration.ofSeconds(2)); // YOLO
         LOG.info("I feel refreshed");
+        //TODO Even these should probably be moved into their own activity
         orderActivityOutput.addMessage(orderActivities.shipPackage(order.getOrderPackages()).getMessage());
         orderActivityOutput.addMessage(orderActivities.notifyCustomer(order.getCustomer()).getMessage());
         orderActivityOutput.addMessage("Confirmation Number: " + confirmationNumber);
