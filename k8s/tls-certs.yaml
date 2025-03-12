@@ -10,5 +10,5 @@ stringData:
     -----END CERTIFICATE-----
   ca.key: |
     -----BEGIN PRIVATE KEY-----
-        Your ca.pem contents here
+        Your ca.key contents here
     -----END PRIVATE KEY-----
