@@ -10,25 +10,6 @@ import java.util.stream.Stream;
 //This is just here as a code example. It does nothing and has no impl
 public class ScheduledWorkflow {
 
-    public static void main(String[] args) {
-
-        Schedule schedule =
-                Schedule.newBuilder()
-                        .setAction(
-                                ScheduleActionStartWorkflow.newBuilder()
-                                        .setWorkflowType(OrdersWorkflow.class)
-                                        .setArguments("World")
-                                        .setOptions(
-                                                WorkflowOptions.newBuilder()
-                                                        .setWorkflowId("WorkflowId")
-                                                        .setTaskQueue("scheduleClient")
-                                                        .build())
-                                        .build())
-                        .setSpec(ScheduleSpec.newBuilder().build())
-                        .build();
-        ScheduleHandle handle = scheduleClient.createSchedule("ScheduleId", schedule, ScheduleOptions.newBuilder().build());
-    }
-
     static ScheduleClient scheduleClient = new ScheduleClient() {
         @Override
         public ScheduleHandle createSchedule(String scheduleID, Schedule schedule, ScheduleOptions options) {
@@ -55,4 +36,23 @@ public class ScheduledWorkflow {
             return Stream.empty();
         }
     };
+
+    public static void main(String[] args) {
+
+        Schedule schedule =
+                Schedule.newBuilder()
+                        .setAction(
+                                ScheduleActionStartWorkflow.newBuilder()
+                                        .setWorkflowType(OrdersWorkflow.class)
+                                        .setArguments("World")
+                                        .setOptions(
+                                                WorkflowOptions.newBuilder()
+                                                        .setWorkflowId("WorkflowId")
+                                                        .setTaskQueue("scheduleClient")
+                                                        .build())
+                                        .build())
+                        .setSpec(ScheduleSpec.newBuilder().build())
+                        .build();
+        ScheduleHandle handle = scheduleClient.createSchedule("ScheduleId", schedule, ScheduleOptions.newBuilder().build());
+    }
 }
