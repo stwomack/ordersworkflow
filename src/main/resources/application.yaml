@@ -14,8 +14,8 @@ spring:
 orderprocessingservice-url: http://orderprocessing-service/
 temporal:
   taskQueue: orders-tasks
-  target: orders-dev.imu8t.tmprl.cloud:7233
-  ns: orders-dev.imu8t
+  target: orders-dev.sdvdw.tmprl.cloud:7233
+  ns: orders-dev.sdvdw
   cert: /usr/local/bin/ca.pem
   key: /usr/local/bin/ca.key
 logging:

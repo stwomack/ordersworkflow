@@ -18,8 +18,6 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
         RetryOptions retryOptions = RetryOptions.newBuilder()
                 .setInitialInterval(Duration.ofSeconds(2))
                 .setMaximumInterval(Duration.ofSeconds(120))
-                .setBackoffCoefficient(2.0)
-                .setMaximumAttempts(50)
                 .build();
 
         orderActivityOptions = ActivityOptions.newBuilder()
