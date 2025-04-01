@@ -2,6 +2,7 @@ package com.womack.ordersworkflow.services;
 
 import com.womack.ordersworkflow.activities.OrderActivitiesImpl;
 import com.womack.ordersworkflow.domain.SubmittedOrder;
+import com.womack.ordersworkflow.helpers.CustomPayloadCodec;
 import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
 import com.womack.ordersworkflow.workflows.OrdersWorkflow;
 import com.womack.ordersworkflow.workflows.OrdersWorkflowImpl;
@@ -10,6 +11,8 @@ import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.common.converter.CodecDataConverter;
+import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.serviceclient.SimpleSslContextBuilder;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -31,21 +35,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 
 @RestController
 @EnableScheduling
 public class OrdersWorkflowService {
     public static final Logger LOG = Workflow.getLogger(OrdersWorkflowService.class);
-
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
     WorkflowClient client;
     WorkerFactory factory;
-
+    @Autowired
+    private ApplicationContext applicationContext;
+    @Autowired
+    private RestTemplate restTemplate;
     @Value("${orderprocessingservice-url}")
     private String serviceUrl;
 
@@ -78,16 +79,20 @@ public class OrdersWorkflowService {
         LOG.info("Worker started");
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "There's only one endpoint here, /submitOrder ";
+    }
+
     @PostMapping("/submitOrder")
     // @Scheduled(fixedRate = 20000)
     public void generateOrderWorkflow() {
         SubmittedOrder submittedOrder = SubmittedOrderHelper.createSubmittedOrder();
-        StringBuilder stringBuilder = new StringBuilder()
-                .append("SubmittedOrder::")
-                .append(submittedOrder.getOrderNumber());
+        String stringBuilder = "SubmittedOrder::" +
+                submittedOrder.getOrderNumber();
         WorkflowOptions options = WorkflowOptions.newBuilder()
                 .setTaskQueue(temporalTaskQueue)
-                .setWorkflowId(stringBuilder.toString())
+                .setWorkflowId(stringBuilder)
                 .build();
 
         OrdersWorkflow workflow = getClient().newWorkflowStub(OrdersWorkflow.class, options);
@@ -112,6 +117,10 @@ public class OrdersWorkflowService {
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(stubsOptions);
         WorkflowClientOptions options = WorkflowClientOptions.newBuilder()
                 .setNamespace(namespace)
+                .setDataConverter(
+                        new CodecDataConverter(
+                                DefaultDataConverter.newDefaultInstance(),
+                                Collections.singletonList(new CustomPayloadCodec()), true))
                 .build();
 
         return WorkflowClient.newInstance(service, options);

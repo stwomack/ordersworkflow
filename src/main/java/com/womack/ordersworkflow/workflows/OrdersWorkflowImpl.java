@@ -1,5 +1,6 @@
 package com.womack.ordersworkflow.workflows;
 
+import com.google.gson.Gson;
 import com.womack.ordersworkflow.activities.OrderActivities;
 import com.womack.ordersworkflow.domain.*;
 import com.womack.ordersworkflow.helpers.SubmittedOrderHelper;
@@ -25,7 +26,7 @@ public class OrdersWorkflowImpl implements OrdersWorkflow {
                 .setRetryOptions(retryOptions)
                 .build();
         OrderActivities orderActivities = Workflow.newActivityStub(OrderActivities.class, orderActivityOptions);
-        LOG.info("Workflow init: {} ", order.toString());
+        LOG.info("Workflow init: {} ");
         String confirmationNumber = orderActivities.generateOrderNumber();
         OrderActivityOutput orderActivityOutput = orderActivities.checkInventory(order.getOrderItems());
         orderActivityOutput.addMessage(orderActivities.processPayment(confirmationNumber, order.getPayment()).getMessage());

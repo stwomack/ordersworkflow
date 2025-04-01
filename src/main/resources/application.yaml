@@ -20,5 +20,5 @@ temporal:
   key: /usr/local/bin/ca.key
 logging:
   level:
-    io.temporal: DEBUG
+    io.temporal: INFO
 

@@ -36,6 +36,7 @@ public class SubmittedOrderHelper {
         Customer customer = new Customer();
         customer.setName("Duke Womack");
         order.setCustomer(customer);
+        LOG.info("The next log line is JSON for copy/past into GUI or CLI");
         LOG.info(new Gson().toJson(order));
         return order;
     }
