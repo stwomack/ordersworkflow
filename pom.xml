@@ -34,16 +34,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>io.temporal</groupId>
-			<artifactId>temporal-sdk</artifactId>
-			<version>1.28.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.temporal</groupId>
-			<artifactId>temporal-testing</artifactId>
-			<version>1.28.0</version>
-			<scope>test</scope>
+			<artifactId>temporal-spring-boot-starter</artifactId>
+			<version>1.28.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xerial.snappy</groupId>
