@@ -14,10 +14,10 @@ spring:
 orderprocessingservice-url: http://orderprocessing-service/
 temporal:
   taskQueue: orders-tasks
-  target: temporaltest-frontend.default.svc.cluster.local:7233
-  ns: default
-#  cert: /usr/local/bin/ca.pem
-#  key: /usr/local/bin/ca.key
+  target: orders-dev.ydusq.tmprl.cloud:7233
+  ns: bloop.ydusq
+  cert: /usr/local/bin/ca.pem
+  key: /usr/local/bin/ca.key
 logging:
   level:
     io.temporal: INFO
