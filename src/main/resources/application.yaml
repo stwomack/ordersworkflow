@@ -15,6 +15,7 @@ orderprocessingservice-url: http://orderprocessing-service/
 temporal:
   taskQueue: orders-tasks
   target: temporaltest-frontend.default.svc.cluster.local:7233
+#  target: localhost:7233
   ns: default
 #  cert: /usr/local/bin/ca.pem
 #  key: /usr/local/bin/ca.key

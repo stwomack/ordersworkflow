@@ -59,11 +59,11 @@ public class OrdersWorkflowService {
     @Value("${temporal.taskQueue}")
     private String temporalTaskQueue;
 
-    @Value("${temporal.cert}")
-    private String temporalCert;
-
-    @Value("${temporal.key}")
-    private String temporalKey;
+//    @Value("${temporal.cert}")
+//    private String temporalCert;
+//
+//    @Value("${temporal.key}")
+//    private String temporalKey;
 
     @PostConstruct
     public void startWorker() throws IOException {
@@ -106,12 +106,12 @@ public class OrdersWorkflowService {
     }
 
     private WorkflowClient createWorkflowClient() throws FileNotFoundException, SSLException {
-        InputStream clientCertInputStream = new FileInputStream(temporalCert);
-        InputStream clientKeyInputStream = new FileInputStream(temporalKey);
+//        InputStream clientCertInputStream = new FileInputStream(temporalCert);
+//        InputStream clientKeyInputStream = new FileInputStream(temporalKey);
 
-        SslContext sslContext = SimpleSslContextBuilder.forPKCS8(clientCertInputStream, clientKeyInputStream).build();
+//        SslContext sslContext = SimpleSslContextBuilder.forPKCS8(clientCertInputStream, clientKeyInputStream).build();
         WorkflowServiceStubsOptions stubsOptions = WorkflowServiceStubsOptions.newBuilder()
-                .setSslContext(sslContext)
+//                .setSslContext(sslContext)
                 .setTarget(target)
                 .build();
         WorkflowServiceStubs service = WorkflowServiceStubs.newServiceStubs(stubsOptions);
